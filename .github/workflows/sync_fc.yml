@@ -1,0 +1,27 @@
+on:
+  workflow_dispatch:  # Allow manual triggering
+
+env:
+  CARGO_INCREMENTAL: 0
+
+jobs:
+  sync_fc:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: rustup update
+      - run: rustup target add x86_64-unknown-linux-musl
+      - run: cd fc_server
+      - run: cargo build --target=x86_64-unknown-linux-musl --release
+      - run: cd ..
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+      - run: pip install requests oss2 alibabacloud-tea-openapi
+      - run: python python_scripts/sync_fc.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
+          ACCESS_KEY_SECRET: ${{ secrets.ACCESS_KEY_SECRET }}
