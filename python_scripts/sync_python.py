@@ -8,7 +8,6 @@ import requests
 from aliyun_utils import oss_list_all_keys, oss_upload
 
 
-download_metadata_url = "https://raw.githubusercontent.com/astral-sh/uv/main/crates/uv-python/download-metadata.json"
 python_prefix = (
     "https://github.com/astral-sh/python-build-standalone/releases/download/"
 )
@@ -16,6 +15,7 @@ pypy_prefix = "https://downloads.python.org/pypy/"
 
 
 def get_all_download_url_checksum_tuples() -> List[Tuple[str, str]]:
+    download_metadata_url = "https://raw.githubusercontent.com/astral-sh/uv/main/crates/uv-python/download-metadata.json"
     resp = requests.get(download_metadata_url)
     resp.raise_for_status()
     download_metadata: dict = json.loads(resp.text)

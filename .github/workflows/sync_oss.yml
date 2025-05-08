@@ -3,6 +3,11 @@ on:
     - cron: '22 6,18 * * *'  # Runs at 06:22 and 18:22
   workflow_dispatch:  # Allow manual triggering
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
+  ACCESS_KEY_SECRET: ${{ secrets.ACCESS_KEY_SECRET }}
+
 jobs:
   sync_oss:
     runs-on: ubuntu-22.04
@@ -13,8 +18,5 @@ jobs:
         with:
           python-version: '3.13'
       - run: pip install requests oss2 alibabacloud-tea-openapi
-      - run: python python_scripts/sync_oss.py
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
-          ACCESS_KEY_SECRET: ${{ secrets.ACCESS_KEY_SECRET }}
+      - run: python python_scripts/sync_uv.py
+      - run: python python_scripts/sync_python.py

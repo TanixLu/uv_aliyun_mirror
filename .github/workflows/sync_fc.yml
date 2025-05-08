@@ -6,6 +6,9 @@ on:
 
 env:
   CARGO_INCREMENTAL: 0
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
+  ACCESS_KEY_SECRET: ${{ secrets.ACCESS_KEY_SECRET }}
 
 jobs:
   sync_fc:
@@ -23,7 +26,4 @@ jobs:
           python-version: '3.13'
       - run: pip install requests oss2 alibabacloud-tea-openapi
       - run: python python_scripts/sync_fc.py
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
-          ACCESS_KEY_SECRET: ${{ secrets.ACCESS_KEY_SECRET }}
+
