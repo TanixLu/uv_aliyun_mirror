@@ -1,4 +1,7 @@
 on:
+  push:
+    paths:
+      - fc_server/**
   workflow_dispatch:  # Allow manual triggering
 
 env:
