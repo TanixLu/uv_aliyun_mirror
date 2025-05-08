@@ -9,7 +9,7 @@ use std::path::Path as FsPath;
 use tokio::net::TcpListener;
 
 async fn handle_get(Path(req_path): Path<String>) -> Response {
-    let full_path = FsPath::new("/mnt/oss").join(&req_path);
+    let full_path = FsPath::new("/mnt/bucket").join(&req_path);
 
     if full_path.exists() && full_path.is_file() {
         match tokio::fs::read(&full_path).await {

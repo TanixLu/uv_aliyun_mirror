@@ -7,3 +7,4 @@ fc_upload(
     "uv_mirror_service",
     "uv_mirror_fc",
 )
+print("Done")
