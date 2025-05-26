@@ -74,7 +74,9 @@ def main() -> None:
     ]
     print(f"{len(not_exists_url_checksum_tuples)=}")
 
-    outdated_keys = [k for k in oss_keys if k not in need_mirror_keys_set]
+    outdated_keys = [
+        k for k in oss_keys if not k.startswith("uv-") and k not in need_mirror_keys_set
+    ]
     print(f"{len(outdated_keys)=}")
 
     with ThreadPoolExecutor(max_workers=32) as executor:
