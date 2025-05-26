@@ -87,3 +87,9 @@ def oss_upload(bucket_key: str, data: Union[bytes, Path]) -> None:
         result = oss_bucket.put_object(bucket_key, data)
     if result.status != 200:
         raise Exception(f"Failed to upload {bucket_key}")
+
+
+def oss_batch_delete(key_list: List[str]) -> None:
+    result = oss_bucket.batch_delete_objects(key_list)
+    if result.status != 200:
+        raise Exception(f"Failed to delete {key_list}")

@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests
 
-from aliyun_utils import oss_list_all_keys, oss_upload
+from aliyun_utils import oss_list_all_keys, oss_upload, oss_batch_delete
 
 
 python_prefix = (
@@ -63,6 +63,7 @@ def main() -> None:
     need_mirror_url_checksum_tuples = [
         t for t in download_url_checksum_tuples if is_url_need_mirror(t[0])
     ]
+    need_mirror_keys_set = set([url2key(t[0]) for t in need_mirror_url_checksum_tuples])
     print(f"{len(need_mirror_url_checksum_tuples)=}")
 
     oss_keys = oss_list_all_keys()
@@ -72,6 +73,9 @@ def main() -> None:
         t for t in need_mirror_url_checksum_tuples if url2key(t[0]) not in oss_keys
     ]
     print(f"{len(not_exists_url_checksum_tuples)=}")
+
+    outdated_keys = [k for k in oss_keys if k not in need_mirror_keys_set]
+    print(f"{len(outdated_keys)=}")
 
     with ThreadPoolExecutor(max_workers=32) as executor:
         futures = [
@@ -83,6 +87,13 @@ def main() -> None:
                 print(future.result())
             except Exception as e:
                 print(f"Error: {e}")
+
+    if outdated_keys:
+        try:
+            oss_batch_delete(outdated_keys)
+            print("delete all outdated python")
+        except Exception as e:
+            print(f"Error: {e}")
 
     print("Done")
 
